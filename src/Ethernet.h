@@ -100,6 +100,8 @@ public:
 	static IPAddress dnsServerIP() { return _dnsServerAddress; }
 
 	void setMACAddress(const uint8_t *mac_address);
+	void setHostname(const char* name);
+	void setHostname(const String& name) { setHostname(name.c_str()); }
 	void setLocalIP(const IPAddress local_ip);
 	void setSubnetMask(const IPAddress subnet);
 	void setGatewayIP(const IPAddress gateway);
@@ -277,6 +279,7 @@ private:
 	uint32_t _dhcpInitialTransactionId;
 	uint32_t _dhcpTransactionId;
 	uint8_t  _dhcpMacAddr[6];
+	char     _dhcpHostname[32];
 #ifdef __arm__
 	uint8_t  _dhcpLocalIp[4] __attribute__((aligned(4)));
 	uint8_t  _dhcpSubnetMask[4] __attribute__((aligned(4)));
@@ -316,10 +319,7 @@ public:
 
 	int beginWithDHCP(uint8_t *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
 	int checkLease();
+	void setHostname(const char* name);
 };
-
-
-
-
 
 #endif

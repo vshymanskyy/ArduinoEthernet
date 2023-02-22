@@ -26,9 +26,10 @@
 IPAddress EthernetClass::_dnsServerAddress;
 DhcpClass* EthernetClass::_dhcp = NULL;
 
+static DhcpClass s_dhcp;
+
 int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
 {
-	static DhcpClass s_dhcp;
 	_dhcp = &s_dhcp;
 
 	// Initialise the basic info
@@ -193,6 +194,11 @@ void EthernetClass::setMACAddress(const uint8_t *mac_address)
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setMACAddress(mac_address);
 	SPI.endTransaction();
+}
+
+void EthernetClass::setHostname(const char* name)
+{
+	s_dhcp.setHostname(name);
 }
 
 void EthernetClass::setLocalIP(const IPAddress local_ip)
